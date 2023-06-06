@@ -1,11 +1,22 @@
-const mongoose = require('mongoose')
-const Post = require('./database/models/Post')
+const mongoose = require('mongoose');
+const Post = require('./database/models/Post');
+const dotenv = require('dotenv');
 
-mongoose.connect('mongodb://localhost/node-js-test-blog')
+dotenv.config({ path: '.env' });
 
-Post.find({}, (error, posts) => {
-  console.log(error, posts)
-})
+async function connect() {
+  try {
+    mongoose.set('strictQuery', true);
+    await mongoose.connect(`${process.env.MONGO_URI}`);
+    console.log('Connected to Database');
+  } catch (err) {
+    console.log(`Connection Error: ${err}`);
+  }
+}
+
+connect();
+
+Post.find();
 
 // Post.findById("5b309ceca84e99bbb6601904", (error, post) => {
 //   console.log(error, post)
@@ -22,9 +33,7 @@ Post.find({}, (error, posts) => {
 // })
 
 // Post.create({
-//   title: 'My second blog post',
-//   description: 'Second Blog post description',
-//   content: 'Second Lorem ipsum content.'
-// }, (error, post) => {
-//   console.log(error, post)
-// })
+//   title: 'My first blog post',
+//   description: 'First Blog post description',
+//   content: 'First Lorem ipsum content.',
+// });
